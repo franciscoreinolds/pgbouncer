@@ -771,9 +771,8 @@ static void cleanup_inactive_pools(void)
 			continue;
 
 		/* Check if the pool is actually "unused" */
-		if (pool_client_count(pool) == 0) {
+		if (pool_client_count(pool) == 0 && pool_connected_server_count(pool) == 0) {
 			usec_t now = get_cached_time();
-			log_info("[cleanup_inactive_pools]: Now [ % " PRIu64 "] Pool %s Client count %d Last active time % " PRIu64 "s", now, pool->user_credentials->name, pool_client_count(pool), pool->last_active_time);
 			/* 10s inactivity */
 			if ((now - pool->last_active_time) / USEC > 10) {
 				log_debug("cleaning up inactive pool for user %s on db %s", pool->user_credentials->name, pool->db->name);
